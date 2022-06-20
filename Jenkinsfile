@@ -4,6 +4,7 @@ pipeline{
     }
     environment{
         CLUSTER_NAME = ""
+        ACTION = "destroy"
     }
     stages{
         stage('Validating terraform') {
@@ -21,10 +22,13 @@ pipeline{
             }
             steps {
                 script{
+                    if(ACTION == "apply"){
                         sh 'terraform apply --auto-approve'
                         CLUSTER_NAME = sh(returnStdout: true, script: "terraform output eks-cluster-name").trim()
                         sh'aws eks update-kubeconfig --name ${CLUSTER_NAME}'
                         echo "Created eks cluster"
+                    }else{
+                    }
                 }
             }
         }
@@ -34,25 +38,18 @@ pipeline{
             }
             steps {
                 script{
+                    if(ACTION == "apply"){
                         sh'''
                         kubectl create namespace argocd
                         kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
                         '''
-                }
-            }
-        }
-
-        stage("destroying eks cluster") {
-            when {
-                branch 'destroy'
-            }
-            steps  {
-                script{
-                    sh'''
-                    kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-                    kubectl delete namespace argocd
-                    terraform destroy --auto-approve
-                    '''
+                    }else{
+                        sh'''
+                        kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+                        kubectl delete namespace argocd
+                        terraform destroy --auto-approve
+                        '''
+                    }
                 }
             }
         }
