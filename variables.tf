@@ -22,3 +22,7 @@ variable "public-key-pair" {
   type        = string
   sensitive   = true
 }
+
+variable "hosted-zone" {
+  
+}
