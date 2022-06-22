@@ -13,3 +13,7 @@ output "eks-cluster-name" {
 output "s3-bucket-name" {
   value = data.aws_s3_bucket.selected.id
 }
+
+output "hosted-zone-ns-servers" {
+  value = aws_route53_zone.primary.name_servers
+}
