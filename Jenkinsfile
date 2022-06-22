@@ -23,7 +23,7 @@ pipeline{
                 script{
                     if(ACTION == "apply"){
                         sh 'terraform apply --auto-approve'
-                        CLUSTER_NAME = sh(returnStatus: true, script: "terraform output eks-cluster-name").trim()
+                        CLUSTER_NAME = sh(script: "terraform output eks-cluster-name", returnStdout: true).trim()
                         sh'aws eks update-kubeconfig --name ${CLUSTER_NAME}'
                         echo "Created eks cluster"
 
