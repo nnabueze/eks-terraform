@@ -25,10 +25,22 @@ pipeline{
                     if(ACTION == "apply"){
                         sh 'terraform apply --auto-approve'
                         CLUSTER_NAME = sh(returnStdout: true, script: "terraform output eks-cluster-name").trim()
-                        sh'aws eks update-kubeconfig --name ${CLUSTER_NAME}'
-                        echo "Created eks cluster"
+
                     }else{
                         echo 'destroying cluster'
+                    }
+                }
+            }
+        }
+        stage('Configure KubeCTL'){
+            when {
+                branch 'dev'
+            }
+            steps {
+                script{
+                    if(ACTION == "apply"){
+                        sh'aws eks update-kubeconfig --name ${CLUSTER_NAME}'
+                        echo "Created eks cluster"
                     }
                 }
             }
