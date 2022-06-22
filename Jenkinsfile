@@ -10,7 +10,7 @@ pipeline{
         stage('Validating terraform') {
             steps {
                 sh '''
-                terraform init
+                terraform init -reconfigure
                 terraform validate
                 terraform plan
                 '''
@@ -23,7 +23,6 @@ pipeline{
             steps {
                 script{
                     if(ACTION == "apply"){
-                        sh 'terraform init -reconfigure'
                         sh 'terraform apply --auto-approve'
                         CLUSTER_NAME = sh(returnStdout: true, script: "terraform output eks-cluster-name").trim()
 
