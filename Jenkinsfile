@@ -23,6 +23,7 @@ pipeline{
             steps {
                 script{
                     if(ACTION == "apply"){
+                        sh 'terraform init -reconfigure'
                         sh 'terraform apply --auto-approve'
                         CLUSTER_NAME = sh(returnStdout: true, script: "terraform output eks-cluster-name").trim()
 
