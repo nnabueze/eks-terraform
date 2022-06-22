@@ -4,7 +4,7 @@ pipeline{
     }
     environment{
         CLUSTER_NAME = ""
-        ACTION = "apply"
+        ACTION = "destroy"
     }
     stages{
         stage('Validating terraform') {
@@ -58,8 +58,6 @@ pipeline{
                         '''
                     }else{
                         sh'''
-                        kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-                        kubectl delete namespace argocd
                         terraform destroy --auto-approve
                         '''
                     }
