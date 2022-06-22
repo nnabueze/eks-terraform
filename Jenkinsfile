@@ -46,11 +46,17 @@ pipeline{
                         sh'''
                         kubectl create namespace argocd
                         kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+                        kubectl create namespace argo-rollouts
+                        kubectl apply -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
+
                         '''
                     }else{
                         sh'''
                         kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
                         kubectl delete namespace argocd
+                        kubectl delete -n argo-rollouts -f https://github.com/argoproj/argo-rollouts/releases/latest/download/install.yaml
+                        kubectl delete namespace argo-rollouts
+
                         terraform destroy --auto-approve
                         '''
                     }
