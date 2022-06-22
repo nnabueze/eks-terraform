@@ -1,6 +1,6 @@
 terraform {
     backend "s3" {
-    bucket = data.aws_s3_bucket.selected.id
+    bucket = "s3-terraform-cicd"
     key    = "backend"
     region = "eu-central-1"
   }
