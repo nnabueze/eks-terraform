@@ -2,7 +2,7 @@ terraform {
     backend "s3" {
     bucket = data.aws_s3_bucket.selected.id
     key    = "backend"
-    region = var.region
+    region = "eu-central-1"
   }
 }
 
