@@ -36,7 +36,7 @@ pipeline{
             }
         }
 
-        stage('ArgoCD Handling') {
+        stage('ArgoCD Handle') {
             when {
                 branch 'dev'
             }
